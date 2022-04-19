@@ -7,9 +7,7 @@ app = FastAPI()
 @app.get('/test')
 def return_test():
 
-    return_val = '''
-        Test 1: {os.environ.get("test1")
-    '''
+    test1 = os.environ.get("test1")
 
-    return return_val
+    return test1
 
