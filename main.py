@@ -1,13 +1,55 @@
+import json
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, HTTPException
 
-app = FastAPI()
+from fapi_logging.fapi_logging import retrieve_logger
+from models import ProjectSnapshot
 
-@app.get('/test')
-def return_test():
+from verify_sig_tools.sig_verify import sig_verify
 
-    test1 = os.environ.get("test1")
+app = FastAPI(debug=True)
 
-    return test1
+logger = retrieve_logger()
+
+
+@app.get('/test', status_code=200)
+async def return_test():
+    return 'OK'
+
+
+@app.post('/test_post', status_code=200)
+async def do_post(request: Request):
+
+    body = await request.body()
+
+    signature = request.headers['X-Hub-Signature']
+    event = request.headers['X-Snyk-Event']
+
+    logger.debug('Got signature -> %s', signature)
+    logger.debug('Got event -> %s', event)
+
+    logger.debug('got secret %s', os.getenv('SECRET'))
+
+    if event == 'project_snapshot/v0':
+
+        if sig_verify(signature, body):
+
+            logger.debug('Signature was verified')
+
+            ps = None
+
+            try:
+                ps = ProjectSnapshot.parse_raw(body)
+                logger.info("orgid %s", ps.org.id)
+            except Exception:
+                raise HTTPException(status_code=500, detail="Invalid Request Body")
+
+            if ps is not None:
+                pass
+
+        else:
+            raise HTTPException(status_code=500, detail="Invalid Signature")
+    else:
+        return {'msg': 'Ignoring event'}
 
