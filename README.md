@@ -19,6 +19,8 @@ You can use a different token/signature by:
 4) adding the signature to the header `X-Hub-Signature`
 5) in your project, update the `.env` file to match the secret you chose
 
+NOTE! Make sure your JSON payload isn't formatted. It should be one string with no spaces. 
+
 
 ## Notes
 This app uses FastAPI and the Pydantic data model. Requests are received as raw json, the signature verified, and then marshalled into a Pydantic model
