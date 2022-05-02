@@ -1,3 +1,5 @@
 #!/usr/bin/env sh
 
-cd ../ && uvicorn main:app --env-file .env
+cd ../
+. env/bin/activate
+uvicorn main:app --env-file .env

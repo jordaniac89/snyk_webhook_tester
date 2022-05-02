@@ -25,7 +25,7 @@ log_config = {
 }
 
 
-def init_logger():
+def __init_logger():
     dictConfig(log_config)
 
 
