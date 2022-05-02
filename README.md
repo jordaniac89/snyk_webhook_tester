@@ -15,9 +15,8 @@ Signature verification should work out of the box. I'm using `secret_token_12345
 You can use a different token/signature by:
 1) going to the postman request -> Pre-request Script tab -> Change `secret_token` to something of your choice.
 2) doing a post
-3) retrieving the output from the console
-4) adding the signature to the header `X-Hub-Signature`
-5) in your project, update the `.env` file to match the secret you chose
+
+in your project, update the `.env` file to match the secret you chose
 
 NOTE! Make sure your JSON payload isn't formatted. It should be one string with no spaces. 
 
