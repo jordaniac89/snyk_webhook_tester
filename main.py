@@ -34,22 +34,19 @@ async def do_post(request: Request):
     if event == 'project_snapshot/v0':
 
         if sig_verify(signature, body):
-
             logger.debug('Signature was verified')
-
-            ps = None
-
-            try:
-                ps = ProjectSnapshot.parse_raw(body)
-                logger.info("orgid %s", ps.org.id)
-            except Exception:
-                raise HTTPException(status_code=500, detail="Invalid Request Body")
-
-            if ps is not None:
-                pass
-
         else:
-            raise HTTPException(status_code=500, detail="Invalid Signature")
+            raise HTTPException(status_code=401, detail="Invalid Signature")
+
+        ps = None
+        try:
+            ps = ProjectSnapshot.parse_raw(body)
+            logger.info("orgid %s", ps.org.id)
+        except Exception:
+            raise HTTPException(status_code=500, detail="Invalid Request Body")
+
+        if ps is not None:
+            pass  # TODO: go to town!
     else:
         return {'msg': 'Ignoring event'}
 

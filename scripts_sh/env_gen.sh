@@ -2,7 +2,7 @@
 
 cd ../
 
-python3 -m venv env
+$(which python3) -m venv env
 . env/bin/activate
 
 pip install --upgrade pip
